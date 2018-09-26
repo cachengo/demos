@@ -1,0 +1,8 @@
+    dependencies:
+    - name: cachengo-nnsearch
+      version: "0.1.0"
+      repository: "file://../cachengo-nnsearch"
+    - name: facerec
+      version: "0.1.0"
+      repository: "file://../facerec"
+

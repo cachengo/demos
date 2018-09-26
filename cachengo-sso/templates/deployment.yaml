@@ -1,0 +1,56 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "cachengo-sso.fullname" . }}
+  labels:
+    app: {{ template "cachengo-sso.name" . }}
+    chart: {{ template "cachengo-sso.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "cachengo-sso.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cachengo-sso.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: NN_SEARCH_ADDRESS
+            value: "nn_search:1323"
+          - name: FACEREC_ADDRESS
+            value: "facerec:5000"
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+          volumeMounts:
+          - mountPath: /db
+            name: cachengo-db-volume
+      volumes:
+      - name: cachengo-db-volume
+        hostPath:
+            path: /db/sso
+            type: Directory

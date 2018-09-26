@@ -1,0 +1,9 @@
+dependencies:
+- name: cachengo-nnsearch
+  repository: file://../cachengo-nnsearch
+  version: 0.1.0
+- name: facerec
+  repository: file://../facerec
+  version: 0.1.0
+digest: sha256:4d6d20772b86ae232afe9e5587178d0a1cf13d8edce157afe51d07dd26f146d8
+generated: 2018-09-26T15:12:06.516114292+05:30
