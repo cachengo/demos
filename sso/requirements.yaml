@@ -5,3 +5,4 @@
     - name: facerec
       version: "0.1.0"
       repository: "file://../facerec"
+

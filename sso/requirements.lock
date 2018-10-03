@@ -6,4 +6,4 @@ dependencies:
   repository: file://../facerec
   version: 0.1.0
 digest: sha256:986962b58f36bb681d52c78345ead23f198d9baf80c4fe83c8117013049e8905
-generated: 2018-09-27T19:04:17.770306697+05:30
+generated: 2018-10-03T14:08:07.138804402+05:30

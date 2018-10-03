@@ -25,9 +25,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: {{ .Values.envs.var1}}
-            value: {{ .Values.envs.var1Value}}
+            value: "{{ .Release.Name }}-{{ .Values.envs.var1Value }}"
           - name: {{ .Values.envs.var2}}
-            value: {{ .Values.envs.var2Value}}
+            value: "{{ .Release.Name }}-{{ .Values.envs.var2Value}}"
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort}}
@@ -47,10 +47,10 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
           volumeMounts:
-          - mountPath: /db
-            name: sso-db-volume
+           - mountPath: {{ .Values.persistent.containerPath}}
+             name: {{ .Values.persistent.volumeName}}
       volumes:
-      - name: sso-db-volume
-        hostPath:
-            path: /db/sso
+       - name: {{ .Values.persistent.volumeName}}
+         persistentVolumeClaim: 
+           claimName: {{ .Values.persistent.claimName}}
 

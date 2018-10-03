@@ -17,9 +17,20 @@ service:
 
 envs:
   var1: NN_SEARCH_ADDRESS
-  var1Value: nn_search:1323
+  var1Value: nnsearch:1323
   var2: FACEREC_ADDRESS
   var2Value: facerec:5000
+
+persistent:
+  volumeName: sso-volume
+  volumeType: local
+  storageClassName: sso
+  storageCap: 10Gi
+  accessModes: ReadWriteMany
+  hostPath: "/db/sso"
+  containerPath: "/db"
+  claimName: sso-pv-claim
+  storageRequest: 3Gi
 
 ingress:
   enabled: false

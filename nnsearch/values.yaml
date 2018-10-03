@@ -12,10 +12,22 @@ image:
 service:
   type: ClusterIP
   port: 1323
+  containerPort: 1323
 
 envs:
   var1: ANN_INDEX_LENGTH
   var1Value: 256
+
+persistent:
+  volumeName: nn-volume
+  volumeType: local
+  storageClassName: nnsearch
+  storageCap: 10Gi
+  accessModes: ReadWriteMany
+  hostPath: "/db/index256"
+  containerPath: "/db"
+  claimName: nn-pv-claim
+  storageRequest: 3Gi
 
 ingress:
   enabled: false

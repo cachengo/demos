@@ -27,8 +27,8 @@ spec:
           - name: "{{ .Values.envs.var1}}"
             value: "{{ .Values.envs.var1Value}}"
           ports:
-            - name: http
-              containerPort: 80
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.service.containerPort}}
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -44,11 +44,17 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+#          volumeMounts:
+#          - mountPath: /db
+#            name: nn-db-volume
+#      volumes:
+#      - name: nn-db-volume
+#        hostPath:
+#            path: /db/index256
           volumeMounts:
-          - mountPath: /db
-            name: nn-db-volume
+          - mountPath: {{ .Values.persistent.containerPath}}
+            name: {{ .Values.persistent.volumeName}}
       volumes:
-      - name: nn-db-volume
-        hostPath:
-            path: /db/index256
-
+      - name: {{ .Values.persistent.volumeName}}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistent.claimName}}
