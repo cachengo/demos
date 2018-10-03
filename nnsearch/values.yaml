@@ -12,6 +12,7 @@ image:
 service:
   type: ClusterIP
   port: 1323
+  targetPort: 1323
   containerPort: 1323
 
 envs:
