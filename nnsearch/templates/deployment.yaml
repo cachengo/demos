@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "nnsearch.fullname" . }}
+  labels:
+    app: {{ template "nnsearch.name" . }}
+    chart: {{ template "nnsearch.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "nnsearch.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nnsearch.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: "{{ .Values.envs.var1}}"
+            value: "{{ .Values.envs.var1Value}}"
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.service.containerPort}}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+#          volumeMounts:
+#          - mountPath: /db
+#            name: nn-db-volume
+#      volumes:
+#      - name: nn-db-volume
+#        hostPath:
+#            path: /db/index256
+          volumeMounts:
+          - mountPath: {{ .Values.persistent.containerPath}}
+            name: {{ .Values.persistent.volumeName}}
+      volumes:
+      - name: {{ .Values.persistent.volumeName}}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistent.claimName}}
